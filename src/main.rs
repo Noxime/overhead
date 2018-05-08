@@ -8,6 +8,7 @@ extern crate serde;
 #[macro_use]
 extern crate log;
 extern crate pretty_env_logger;
+extern crate websocket;
 
 mod discord;
 use discord::User;
@@ -15,4 +16,7 @@ use discord::User;
 fn main() {
     pretty_env_logger::init();
     debug!("{:#?}", User::guilds());
+    loop {
+        discord::gateway::poll();
+    }
 }

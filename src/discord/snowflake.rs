@@ -7,6 +7,10 @@ pub struct Snowflake(
 );
 
 impl Snowflake {
+    pub fn new(id: u64) -> Self {
+        Snowflake(id)
+    }
+
     // the creation time of this snowflake (and the object associated with it)
     pub fn time_millis(&self) -> u64 {
         (self.0 >> 22) + 1420070400000

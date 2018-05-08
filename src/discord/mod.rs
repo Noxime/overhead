@@ -12,6 +12,7 @@ use serde::{ Deserialize };
 mod snowflake;
 mod user;
 mod guild;
+pub mod gateway;
 
 pub use ::discord::snowflake::{ Snowflake, Snowable };
 pub use ::discord::user::User;
@@ -21,7 +22,7 @@ const BASE: &'static str = "https://discordapp.com/api/v6/";
 lazy_static! {
     static ref CLIENT: Client = {
         let mut headers = Headers::new();
-        headers.set(Authorization("Bot NDQxNzEzMjQyODgxMTMwNDk2.DdIUPw.8Ld8HMEOH3W-qIBhFFuxIfqfVPs".to_string()));
+        headers.set(Authorization(format!("Bot {}", env!("OVERHEAD_TOKEN"))));
         headers.set(UserAgent::new(format!("DiscordBot (https://noxim.xyz/bot, {}) ALPHA/POC", env!("CARGO_PKG_VERSION"))));
 
         Client::builder()
@@ -52,6 +53,8 @@ where
         Ok(v) => Ok(v),
         Err(why) => {
             error!("deserialize failed: {}", why);
+            error!("response headers: {:#?}", response);
+            error!("response body: {:#?}", response.text());
             Err(E::Deserialize)
         }
     }
